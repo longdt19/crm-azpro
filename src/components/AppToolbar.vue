@@ -228,11 +228,13 @@ export default {
       }
 
       const response = await this.$services.do_request('get', NOTIFICATION_ALL, data)
-      console.log('response', response)
       this.loading_notify_list = false
       if (response.data.message === "Success") {
-        this.notification_list = response.data.data.content
-        console.log('lít', this.notification_list)
+        response.data.data.content.forEach(item => {
+          if (item.status === 0) {
+            this.notification_list.push(item)
+          }
+        })
       }
     },
     test_scroll () {
