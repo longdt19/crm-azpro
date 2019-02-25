@@ -10,7 +10,7 @@
           <page-header v-if="$route.meta.breadcrumb"></page-header>
           <div class="page-wrapper">
             <router-view></router-view>
-          </div>   
+          </div>
            <!-- App Footer -->
           <!-- <v-footer height="auto" class="white pa-3 app--footer">
             <span class="caption"></span>
@@ -33,7 +33,7 @@
           fixed
           >
           <theme-settings></theme-settings>
-        </v-navigation-drawer>        
+        </v-navigation-drawer>
       </v-app>
     </template>
     <template v-else>
@@ -51,10 +51,10 @@
       v-model="snackbar.show"
     >
       {{ snackbar.text }}
-      <v-btn dark flat @click.native="snackbar.show = false" icon> 
+      <v-btn dark flat @click.native="snackbar.show = false" icon>
         <v-icon>close</v-icon>
       </v-btn>
-    </v-snackbar>    
+    </v-snackbar>
   </div>
 </template>
 <script>
@@ -65,6 +65,8 @@ import PageHeader from '@/components/PageHeader';
 import menu from '@/api/menu';
 import ThemeSettings from '@/components/ThemeSettings';
 import AppEvents from  './event';
+import { NOTIFICATION_NEW_COUNT } from '@/constants/endpoints';
+
 export default {
   components: {
     AppDrawer,
@@ -80,7 +82,8 @@ export default {
       show: false,
       text: '',
       color: '',
-    }
+    },
+    loading_notify: false
   }),
 
   computed: {
@@ -92,11 +95,24 @@ export default {
       this.$on(item.name, item.callback);
     });
     window.getApp = this;
+
+    setInterval(function () {
+      if (this.$route.name !== 'Login') {
+        // this.get_new_notifications();
+      }
+    }.bind(this), 3000);
   },
   methods: {
     openThemeSettings () {
       this.$vuetify.goTo(0);
       this.rightDrawer = (!this.rightDrawer);
+    },
+    async get_new_notifications () {
+      if (this.loading_notify.notify) return;
+
+      const response = await this.$services.do_request('get', NOTIFICATION_NEW_COUNT);
+      this.loading_notify = false;
+      console.log('response', response);
     }
   },
 
@@ -105,11 +121,11 @@ export default {
 
 
 <style lang="stylus" scoped>
-  .setting-fab 
-    top:50%!important; 
+  .setting-fab
+    top:50%!important;
     right:0;
-    border-radius:0  
+    border-radius:0
   .page-wrapper
-    min-height:calc(100vh - 64px - 50px - 81px );  
+    min-height:calc(100vh - 64px - 50px - 81px );
 
 </style>

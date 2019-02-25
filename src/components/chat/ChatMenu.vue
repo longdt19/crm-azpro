@@ -14,7 +14,7 @@
           <v-icon :color="item.iconColor" class="mini-icon" size="36">{{ item.icon }}</v-icon>
         </v-list-tile>
       </template>
-    </v-list>          
+    </v-list>
 </div>
 </template>
 
@@ -33,5 +33,5 @@ export default {
   .mini-tile
     a.list__tile--active
       background:hsla(0,0%,100%,.12)
- 
+
 </style>

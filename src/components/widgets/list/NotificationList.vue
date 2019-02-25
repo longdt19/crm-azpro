@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-0">
+  <v-card class="elevation-0" style="width: 400px">
     <v-toolbar card dense color="transparent">
       <v-toolbar-title><h4>Notification</h4></v-toolbar-title>
     </v-toolbar>

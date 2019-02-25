@@ -44,7 +44,7 @@ class Services {
       // network error
       if (!status || status >= 500) {
         // TODO: handle network error and server error
-        window.location.href = process.env.FRONTEND_URL + '/login'
+        window.location.href = process.env.FRONTEND_URL + '/500'
       }
       // authorization issue
       else if (status === 401 || status === 404) {
