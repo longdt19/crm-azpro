@@ -35,6 +35,14 @@
               clearable
             ></v-select>
           </v-flex>
+
+          <v-flex xs12 sm6>
+            <v-text-field label="Nội dung khiếu nại" required v-model="content"></v-text-field>
+          </v-flex>
+          <v-flex xs12 sm6>
+            <v-text-field v-model="processContent" type="text" label="Nội dung xử lý"></v-text-field>
+          </v-flex>
+          <br>
           <v-btn block color="primary" dark @click="search()">
             Tìm kiếm
           </v-btn>
@@ -62,6 +70,8 @@ export default {
       creator: null,
       category: null,
       status: null,
+      content: null,
+      processContent: null,
       loading: false,
       loading_search: false
     }
@@ -72,7 +82,9 @@ export default {
         'customer': this.customer,
         'creator': this.creator,
         'method': this.category,
-        'status': this.status
+        'status': this.status,
+        'content': this.content,
+        'processContent': this.processContent
       }
       this.$emit('search_list', data)
     }

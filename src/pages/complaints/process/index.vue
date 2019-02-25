@@ -106,7 +106,7 @@ export default {
             sortable: false
           },
           {
-            text: 'Nỗi dung khiếu nại',
+            text: 'Nội dung khiếu nại',
             value: 'report_content',
             align: 'center',
             sortable: false

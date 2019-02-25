@@ -36,31 +36,39 @@
 
         <v-card class="elevation-0" style="width: 400px">
           <v-toolbar card dense color="transparent">
-            <v-toolbar-title><h4>Notification</h4></v-toolbar-title>
+            <v-toolbar-title v-if="this.notification_list"><h4>Thông báo</h4></v-toolbar-title>
+            <v-toolbar-title v-else
+            >
+              <h4>Không có thông báo nào</h4>
+            </v-toolbar-title>
           </v-toolbar>
           <v-divider></v-divider>
-          <v-card-text class="pa-0" v-if="loading_notify_list === false">
-            <v-list two-line class="pa-0">
+          <v-card-text class="pa-0" v-if="loading_notify_list === false"
+            style="height: 300px; overflow-y: auto;"
+          >
+            <v-list two-line class="pa-0" >
               <template>
-                <div v-for="(item, index) in items_notify" :key="index" :style=" 'background:' + item.background">
-                  <v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
-                  <v-divider v-else-if="item.divider" :key="index"></v-divider>
-                  <v-list-tile avatar v-else :key="item.title">
-                    <v-list-tile-avatar :color="item.color">
-                      <v-icon dark>{{item.icon}}</v-icon>
-                    </v-list-tile-avatar>
+                <div v-for="(item, index) in notification_list" :key="index"
+                  :style=" 'background:' + item.background"
+                >
+                  <!-- <v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader> -->
+                  <v-divider></v-divider>
+                  <v-list-tile avatar >
                     <v-list-tile-content>
-                      <v-list-tile-sub-title v-html="item.title"></v-list-tile-sub-title>
+                      <v-list-tile-sub-title v-html="item.actionCode"></v-list-tile-sub-title>
+                    </v-list-tile-content>
+                    <v-list-tile-content>
+                      <v-list-tile-sub-title v-html="item.actionName + ' ' + item.id"></v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-action class="caption">
-                      {{item.timeLabel}}
+                      {{formatDate(item.created)}}
                     </v-list-tile-action>
                   </v-list-tile>
                 </div>
               </template>
             </v-list>
             <v-divider></v-divider>
-            <v-btn block flat class="ma-0">All</v-btn>
+            <!-- <v-btn block flat class="ma-0">All</v-btn> -->
             <v-divider></v-divider>
           </v-card-text>
         </v-card>
@@ -105,6 +113,7 @@ import Util from '@/util';
 import ChangePass from './ChangePass'
 import Logout from './Logout'
 import { NOTIFICATION_NEW_COUNT, NOTIFICATION_ALL } from '@/constants/endpoints';
+import formatDate from '@/util/formatDate';
 
 export default {
   name: 'app-toolbar',
@@ -139,7 +148,8 @@ export default {
         color: 'light-green',
         icon: 'account_circle',
         timeLabel: 'Just now',
-        background: '#e5eefb'
+        background: '#e5eefb',
+        category: 'tao_moi'
       },
       { divider: true, inset: true },
       {
@@ -147,26 +157,30 @@ export default {
         color: 'light-blue',
         icon: 'shopping_cart',
         timeLabel: '2 min ago',
-        background: '#e5eefb'
+        background: '#e5eefb',
+        category: 'tao_moi'
       },
       { divider: true, inset: true },
       {
         title: 'Thông báo 3',
         color: 'cyan',
         icon: 'payment',
-        timeLabel: '24 min ago'
+        timeLabel: '24 min ago',
+        category: 'tao_moi'
       },
       { divider: true, inset: true },
       {
         title: 'Thông báo 4',
         color: 'red',
         icon: 'email',
-        timeLabel: '1 hour ago'
+        timeLabel: '1 hour ago',
+        category: 'tao_moi'
       }
     ],
     notifications_count: 0,
     loading_notify: false,
-    loading_notify_list: false
+    loading_notify_list: false,
+    notification_list: []
   }),
   computed: {
     toolbarColor () {
@@ -174,6 +188,7 @@ export default {
     }
   },
   methods: {
+    formatDate,
     handleDrawerToggle () {
       window.getApp.$emit('APP_DRAWER_TOGGLED');
     },
@@ -204,7 +219,6 @@ export default {
       }
     },
     async get_notifications_list () {
-      console.log('get')
       if (this.loading_notify_list) return
       this.loading_notify_list = true
 
@@ -214,7 +228,15 @@ export default {
       }
 
       const response = await this.$services.do_request('get', NOTIFICATION_ALL, data)
+      console.log('response', response)
       this.loading_notify_list = false
+      if (response.data.message === "Success") {
+        this.notification_list = response.data.data.content
+        console.log('lít', this.notification_list)
+      }
+    },
+    test_scroll () {
+      console.log('scroll')
     }
   },
   created () {
