@@ -22,7 +22,8 @@ const INIT_STATE = {
   search_bank: {},
   search_product: {},
   search_customer: {},
-  search_transaction: {}
+  search_transaction: {},
+  complaint_id: null
 }
 
 export default {
@@ -80,6 +81,9 @@ export default {
     search_transaction_loaded: (state, value) => {
       state.search_transaction = value
     },
+    complaint_id_loaded: (state, value) => {
+      state.complaint_id = value
+    },
     restore: (state) => {
       const s = INIT_STATE
       Object.keys(s).forEach(key => {
@@ -100,6 +104,7 @@ export default {
     search_bank: state => state.search_bank,
     search_product: state => state.search_product,
     search_customer: state => state.search_customer,
-    search_transaction: state => state.search_transaction
+    search_transaction: state => state.search_transaction,
+    complaint_id: state => state.complaint_id
   }
 }

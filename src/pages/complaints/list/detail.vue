@@ -11,7 +11,7 @@
           <v-layout wrap>
 
             <v-flex xs12 md4>
-              <v-text-field label="Người tạo đơn" readonly
+              <v-text-field label="Người tạo đơn"
                 v-model="complaint.creator"
               >
               </v-text-field>
@@ -19,7 +19,6 @@
 
             <v-flex xs12 md4>
               <v-select
-                readonly
                 :items="category_select"
                 v-model="complaint.method"
                 label="Hình thức"
@@ -31,7 +30,6 @@
 
             <v-flex xs12 md4>
               <v-select
-                readonly
                 :items="status_select"
                 v-model="complaint.status"
                 label="Trạng thái"
@@ -42,11 +40,11 @@
             </v-flex>
 
             <v-flex xs12 sm6>
-              <v-text-field textarea label="Nội dung khiếu nại" readonly v-model="complaint.content"></v-text-field>
+              <v-text-field textarea label="Nội dung khiếu nại" v-model="complaint.content"></v-text-field>
             </v-flex>
 
             <v-flex xs12 sm6>
-              <v-text-field textarea label="Ghi chú" readonly v-model="complaint.note"></v-text-field>
+              <v-text-field textarea label="Ghi chú" v-model="complaint.note"></v-text-field>
             </v-flex>
 
           </v-layout>

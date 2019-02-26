@@ -49,7 +49,8 @@
             <v-list two-line class="pa-0" >
               <template>
                 <div v-for="(item, index) in notification_list" :key="index"
-                  :style=" 'background:' + item.background"
+                  :style=" item.status === 0 ? 'background: #e4ecf9' : ''"
+                  @click="commit_complaint_id(item.complaintId)"
                 >
                   <!-- <v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader> -->
                   <v-divider></v-divider>
@@ -58,7 +59,7 @@
                       <v-list-tile-sub-title v-html="item.actionCode"></v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-content>
-                      <v-list-tile-sub-title v-html="item.actionName + ' ' + item.id"></v-list-tile-sub-title>
+                      <v-list-tile-sub-title v-html="item.actionName + ' ' + item.complaintId"></v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-action class="caption">
                       {{formatDate(item.created)}}
@@ -203,7 +204,13 @@ export default {
     },
     change_title (number) {
       document.title = '(' + number + ') ' + document.title;
-
+    },
+    commit_complaint_id (id) {
+      console.log('commit', this.$store)
+      this.$store.commit('Common/complaint_id_loaded', id)
+      if (this.$route.name !== 'complaints-list') {
+        this.$router.push('/complaints-list')
+      }
     },
     async get_new_notifications () {
       if (this.loading_notify) return
@@ -214,7 +221,7 @@ export default {
       if (response.data.message === "Success") {
         this.notifications_count = response.data.data
         if (this.notifications_count) {
-          this.change_title(this.notifications_count)
+          // this.change_title(this.notifications_count)
         }
       }
     },
@@ -229,12 +236,9 @@ export default {
 
       const response = await this.$services.do_request('get', NOTIFICATION_ALL, data)
       this.loading_notify_list = false
+      console.log('response', response)
       if (response.data.message === "Success") {
-        response.data.data.content.forEach(item => {
-          if (item.status === 0) {
-            this.notification_list.push(item)
-          }
-        })
+        this.notification_list = response.data.data.content
       }
     },
     test_scroll () {
@@ -245,7 +249,7 @@ export default {
     setInterval(function () {
       let pages_ignore = ['Login', '500', '404']
       if (pages_ignore.indexOf(this.$route.name) < 0) {
-        this.get_new_notifications()
+        // this.get_new_notifications()
       }
     }.bind(this), 3000)
   }

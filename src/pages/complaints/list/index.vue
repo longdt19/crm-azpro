@@ -168,6 +168,19 @@ export default {
       search: {},
     };
   },
+  computed: {
+    get_complaint_id () {
+      return this.$store.getters['Common/complaint_id']
+    }
+  },
+  watch: {
+    get_complaint_id () {
+      console.log('123')
+    },
+    '$store.state.Common.complaint_id' (val) {
+      console.log('val', val)
+    }
+  },
   methods: {
     reverseMethod,
     async get_complaints_list () {
@@ -216,6 +229,8 @@ export default {
   },
   created () {
     this.get_complaints_list()
+    console.log('get')
+    console.log('store.state.Common.complaint_id', this.$store.state.Common.complaint_id)
   }
 };
 </script>
