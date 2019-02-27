@@ -73,7 +73,8 @@ export default {
       content: null,
       processContent: null,
       loading: false,
-      loading_search: false
+      loading_search: false,
+      id_complaint: null
     }
   },
   methods: {

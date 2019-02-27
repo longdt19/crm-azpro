@@ -168,17 +168,13 @@ export default {
       search: {},
     };
   },
-  computed: {
-    get_complaint_id () {
-      return this.$store.getters['Common/complaint_id']
-    }
-  },
   watch: {
-    get_complaint_id () {
-      console.log('123')
-    },
-    '$store.state.Common.complaint_id' (val) {
-      console.log('val', val)
+    "$store.state.Common.complaint_id" (val) {
+      this.search = {
+        'id': val
+      }
+      this.get_complaints_list()
+      this.$store.commit('Common/complaint_id_loaded', null)
     }
   },
   methods: {
@@ -191,8 +187,10 @@ export default {
         'size': this.pagination.size,
         'search': this.search
       }
+      console.log('data', data)
       const response = await this.$services.do_request('get', COMPLAINTS_LIST, data)
       this.loading = false
+      console.log('response', response)
 
       if (response.data.message === "Success") {
         this.complex.items = response.data.data.content
@@ -228,9 +226,12 @@ export default {
     }
   },
   created () {
+    if (this.$route.query.id) {
+      this.search = {
+        'id': this.$route.query.id
+      }
+    }
     this.get_complaints_list()
-    console.log('get')
-    console.log('store.state.Common.complaint_id', this.$store.state.Common.complaint_id)
   }
 };
 </script>
