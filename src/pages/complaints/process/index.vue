@@ -23,7 +23,9 @@
               class="elevation-1"
               item-key="name"
               v-model="complex.selected"
-              >
+              :total-items="pagination.total_items"
+              :pagination.sync="pagination_changed"
+            >
               <template slot="items" slot-scope="props">
 
                 <td style="text-align: center">{{ props.item.id}}</td>
@@ -155,8 +157,16 @@ export default {
         page: 0,
         size: 10
       },
-      search: {}
+      search: {},
+      pagination_changed: {}
     };
+  },
+  watch: {
+    'pagination_changed' (val) {
+      this.pagination.page = val.page - 1
+      this.pagination.size = val.rowsPerPage
+      this.get_list()
+    }
   },
   methods: {
     reverseStatus,
@@ -174,6 +184,8 @@ export default {
 
       if (response.data.message === "Success") {
         this.complex.items = response.data.data.content
+        this.pagination.total_items = response.data.data.totalElements
+        this.pagination.total_pages = response.data.data.totalPages
       }  else if (response.status === 400) {
         console.log('Bad resquest')
       } else {

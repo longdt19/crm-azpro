@@ -206,7 +206,6 @@ export default {
       document.title = '(' + number + ') ' + document.title;
     },
     commit_complaint_id (id) {
-      console.log('commit', this.$store)
       this.$store.commit('Common/complaint_id_loaded', id)
       if (this.$route.name !== 'complaints-list') {
         this.$router.push('/complaints-list')
@@ -236,7 +235,6 @@ export default {
 
       const response = await this.$services.do_request('get', NOTIFICATION_ALL, data)
       this.loading_notify_list = false
-      console.log('response', response)
       if (response.data.message === "Success") {
         this.notification_list = response.data.data.content
       }

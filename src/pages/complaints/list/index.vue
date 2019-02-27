@@ -1,11 +1,5 @@
 <template>
   <div id="pageDashboard">
-    <!-- <v-alert
-      :value="true"
-      type="success"
-    >
-      This is a success alert.
-    </v-alert> -->
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
         <v-flex lg12 sm12>
@@ -30,8 +24,9 @@
               rows-per-page-text="Hiển thị"
               :sortable="false"
               class="elevation-1"
-              item-key="name"
               v-model="complex.selected"
+              :total-items="pagination.total_items"
+              :pagination.sync="pagination_changed"
             >
               <template slot="items" slot-scope="props">
                 <td style="text-align: center">{{ props.item.id}}</td>
@@ -160,12 +155,12 @@ export default {
       loading: false,
       pagination: {
         page: 0,
-        size: 30,
-        list: [10, 20, 30],
+        size: 5,
         total_items: 0,
         total_pages: 0
       },
       search: {},
+      pagination_changed: {}
     };
   },
   watch: {
@@ -175,10 +170,18 @@ export default {
       }
       this.get_complaints_list()
       this.$store.commit('Common/complaint_id_loaded', null)
+    },
+    'pagination_changed' (val) {
+      this.pagination.page = val.page - 1
+      this.pagination.size = val.rowsPerPage
+      this.get_complaints_list()
     }
   },
   methods: {
     reverseMethod,
+    pagination_handler () {
+      console.log('prefv')
+    },
     async get_complaints_list () {
       if (this.loading) return
       this.loading = true
@@ -187,10 +190,8 @@ export default {
         'size': this.pagination.size,
         'search': this.search
       }
-      console.log('data', data)
       const response = await this.$services.do_request('get', COMPLAINTS_LIST, data)
       this.loading = false
-      console.log('response', response)
 
       if (response.data.message === "Success") {
         this.complex.items = response.data.data.content
