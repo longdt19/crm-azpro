@@ -221,7 +221,7 @@ export default {
       if (response.data.message === "Success") {
         this.notifications_count = response.data.data
         if (this.notifications_count) {
-          // this.change_title(this.notifications_count)
+          this.change_title(this.notifications_count)
         }
       }
     },
@@ -249,7 +249,7 @@ export default {
     setInterval(function () {
       let pages_ignore = ['Login', '500', '404']
       if (pages_ignore.indexOf(this.$route.name) < 0) {
-        // this.get_new_notifications()
+        this.get_new_notifications()
       }
     }.bind(this), 3000)
   }
