@@ -221,7 +221,7 @@ export default {
       if (response.data.message === "Success") {
         this.notifications_count = response.data.data
         if (this.notifications_count) {
-          this.change_title(this.notifications_count)
+          // this.change_title(this.notifications_count)
         }
       }
     },
