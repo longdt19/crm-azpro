@@ -1,6 +1,6 @@
 /* eslint-disable */
-export const BASE = ''
-// export const BASE = 'transaction-mngt'
+// export const BASE = ''
+export const BASE = 'transaction-mngt'
 
 export const LOGIN_URL = BASE + '/api/az/mngt/auth/login'
 export const CHANGE_PASS_URL = BASE + '/api/az/mngt/auth/change-password'

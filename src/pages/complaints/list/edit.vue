@@ -58,6 +58,9 @@ export default {
       this.dialog_display = true
     },
     async update_complaint() {
+      if (this.common_data.navigation.getMethod === 0) {
+        return
+      }
       if (this.loading) return
       this.loading = true
       const data = {

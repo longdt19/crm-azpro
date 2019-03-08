@@ -7,18 +7,7 @@ const INIT_STATE = {
   token: null,
   constants_loaded: null,
   username: null,
-  navigation: {
-    'CAT_BANK': {},
-    'CAT_CUSTOMER': {},
-    'CAT_PRODUCT': {},
-    'TRANSACTION': {},
-    'AD_ROLE': {},
-    'AD_USER': {},
-    'STA_BANK': {},
-    'STA_CUSTOMER': {},
-    'STA_PRODUCT': {},
-    'CAT_CUSTOMER_GR': {}
-  },
+  navigation: {},
   search_bank: {},
   search_product: {},
   search_customer: {},
@@ -51,23 +40,10 @@ export default {
       state.username = value
     },
     navigation: (state, value) => {
-      value.forEach(item => {
-        state.navigation[item.navigation.code] = item
-      })
+      state.navigation = value
     },
     restore_navigation: (state) => {
-      state.navigation = {
-        'CAT_BANK': {},
-        'CAT_CUSTOMER': {},
-        'CAT_PRODUCT': {},
-        'TRANSACTION': {},
-        'AD_ROLE': {},
-        'AD_USER': {},
-        'STA_BANK': {},
-        'STA_CUSTOMER': {},
-        'STA_PRODUCT': {},
-        'CAT_CUSTOMER_GR': {}
-      }
+      state.navigation = {}
     },
     search_bank_loaded: (state, value) => {
       state.search_bank = value

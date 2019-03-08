@@ -4,7 +4,11 @@
       <v-layout row wrap>
         <v-flex lg12 sm12>
           <div class="" style="text-align: right; margin-bottom: 20px">
-            <v-btn color="success" @click="open_create()">Tạo mới</v-btn>
+            <v-btn color="success" @click="open_create()"
+              :disabled="common_data.navigation.postMethod === 0"
+            >
+              Tạo mới
+            </v-btn>
           </div>
           <search-component @search_list="search_list"/>
 
@@ -34,21 +38,27 @@
                 <td style="text-align: center">{{ props.item.content }}</td>
                 <td style="text-align: center">{{ props.item.processContent}}</td>
                 <td style="text-align: center">
-                  <v-chip :color="reverseMethod(props.item.method)['color']">
+                  <v-chip :color="reverseMethod(props.item.method)['color']" style="color: white">
                     {{ reverseMethod(props.item.method)['category'] }}
                   </v-chip>
                 </td>
                 <td style="text-align: center">{{ props.item.creator }}</td>
+                <td style="text-align: center">
+                  <v-chip :color="reverseStatus(props.item.status)['color']">
+                    {{ reverseStatus(props.item.status)['status'] }}
+                  </v-chip>
+                </td>
                 <td style="text-align: center">{{ props.item.note }}</td>
                 <td style="text-align: center">
                   <v-btn depressed outline icon fab dark color="primary" small
                     @click="open_detail(props.item.id)"
+                    :disabled="common_data.navigation.getMethod === 0"
                   >
                     <v-icon>drag_indicator</v-icon>
                   </v-btn>
                   <v-btn depressed outline icon fab dark color="light-green " small
                     @click="open_edit(props.item)"
-                    :disabled="props.item.status === 5"
+                    :disabled="props.item.status === 5 || common_data.navigation.putMethod === 0"
                   >
                     <v-icon>edit</v-icon>
                   </v-btn>
@@ -75,8 +85,10 @@
 /* eslint-disable */
 import { COMPLAINTS_LIST } from '@/constants/endpoints';
 import { CATEGORIES_COMPLAINTS, STATUS_COMPLAINTS } from '@/api/constant_select';
+import get_status_by_code from '@/util/get_status_by_code';
 
 import VWidget from '@/components/VWidget';
+import reverseStatus from '@/util/reverseStatus'
 import reverseMethod from '@/util/reverseMethod'
 
 import EditComponent from './edit'
@@ -138,6 +150,12 @@ export default {
             sortable: false
           },
           {
+            text: 'Trạng thái',
+            value: 'status',
+            align: 'center',
+            sortable: false
+          },
+          {
             text: 'Ghi chú',
             value: 'note',
             align: 'center',
@@ -179,10 +197,16 @@ export default {
   },
   methods: {
     reverseMethod,
+    reverseStatus,
+    get_status_by_code,
     pagination_handler () {
       console.log('prefv')
     },
     async get_complaints_list () {
+      if (this.common_data.navigation.getMethod === 0) {
+        return
+      }
+
       if (this.loading) return
       this.loading = true
       const data = {
@@ -190,7 +214,9 @@ export default {
         'size': this.pagination.size,
         'search': this.search
       }
+      console.log('data search', data)
       const response = await this.$services.do_request('get', COMPLAINTS_LIST, data)
+      console.log('response', response)
       this.loading = false
 
       if (response.data.message === "Success") {
@@ -227,11 +253,6 @@ export default {
     }
   },
   created () {
-    if (this.$route.query.id) {
-      this.search = {
-        'id': this.$route.query.id
-      }
-    }
     this.get_complaints_list()
   }
 };

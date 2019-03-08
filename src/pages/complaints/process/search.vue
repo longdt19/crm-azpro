@@ -43,7 +43,9 @@
             <v-text-field v-model="processContent" type="text" label="Nội dung xử lý"></v-text-field>
           </v-flex>
           <br>
-          <v-btn block color="primary" dark @click="search()">
+          <v-btn block color="primary" dark @click="search()"
+            :disabled="common_data.navigation.getMethod === 0"
+          >
             Tìm kiếm
           </v-btn>
         </v-layout>

@@ -66,7 +66,12 @@ export default {
         this.$store.commit('Common/tokenLoaded', token)
         const username = response.data.data.username
         this.$store.commit('Common/username', username)
-
+        const navigation_list = response.data.data.listRoleNavigation
+        navigation_list.forEach(item => {
+          if (item.navigation.code === "COMPLAINT") {
+            this.$store.commit('Common/navigation', item)
+          }
+        })
         this.$router.push('/')
       } else if (response.data.code === 401) {
         this.$notify({

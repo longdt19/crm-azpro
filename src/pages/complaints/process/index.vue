@@ -47,6 +47,7 @@
                 <td style="text-align: center">
                   <v-btn depressed outline icon fab dark color="light-green " small
                     @click="open_edit(props.item)"
+                    :disabled="common_data.navigation.putMethod === 0"
                   >
                     <v-icon>edit</v-icon>
                   </v-btn>
@@ -172,6 +173,10 @@ export default {
     reverseStatus,
     reverseMethod,
     async get_list () {
+      if (this.common_data.navigation.getMethod === 0) {
+        return
+      }
+
       if (this.loading) return
       this.loading = true
       const data = {
